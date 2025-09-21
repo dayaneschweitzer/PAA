@@ -21,13 +21,13 @@ int main(int argc, char*argv[]){
     double i=0;
     char fim[100] = "FIM";
 
-    if((cSort(&ptr, sizeof(int)))==FAIL) {
+    if((cSort(&ptr, sizeof(double)))==FAIL) {
         printf("Erro na criacao da arvore\n");
         exit(1);
     }
 
     while (1) {
-        if (!fscanf(stdin, "%d", &novo)) {
+        if (!fscanf(stdin, "%lf", &novo)) {
             break;
         }
         if((iSort(ptr, &novo, comparaDados)) == SUCCESS){
@@ -42,8 +42,5 @@ int main(int argc, char*argv[]){
     printSort(ptr, myprint);
 
     dSort(&ptr);
-    return 0;
-}
-	
     return 0;
 }
