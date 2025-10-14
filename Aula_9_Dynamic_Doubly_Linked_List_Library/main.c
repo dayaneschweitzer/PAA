@@ -1,41 +1,59 @@
-/* Arquivo EXEMQLO DE AQlicacao */
-// MODIFIQUEM-o, CORRIJAM-o!
+/* Arquivo EXEMPLO DE APLICACAO */
+// MODIFIQUEM-no, CORRIJAM-no!
 #include "main.h"
 
-int main(int argc, char *argv[]) {
-    
+int main(void) {
     pDDLL lista = NULL;
-    int ret=0;
-    int num=0;
-    int *arg;
-    int rlines=0;
+    int *arg = NULL;
+    int rlines = 0;
 
-    if (!fscanf(stdin, "%i", &rlines)) {
+    /* lê a quantidade de elementos */
+    if (fscanf(stdin, "%d", &rlines) != 1 || rlines <= 0) {
+        fprintf(stderr, "FAIL: entrada invalida para quantidade.\n");
         return 1;
     }
 
-    arg = (int*) malloc(sizeof(int)*(rlines));
-  
-	if(cDDLL(&lista, sizeof(int))){
-		printf("    FAIL: Erro ao criar a lista.\n");
-	} else 
-	    printf("    OK : Lista criada com SUCCESSo.\n");
-
-    for (int i=0; i<rlines;i++) {
-        if (!fscanf(stdin, "%i", &arg[i])) {
-            return 1;
-        }
-		if(iEnd(lista, &arg[i]) == SUCCESS){
-			printf("    OK :inserido com SUCCESSo(%d).\n",arg[i]);
-		}else{
-			printf(".    FAIL: falha na insercao.\n");
-		}
+    /* aloca buffer para os inteiros de entrada */
+    arg = (int*) malloc(sizeof(int) * (size_t)rlines);
+    if (!arg) {
+        fprintf(stderr, "FAIL: falta de memoria.\n");
+        return 1;
     }
 
-	if(dDDLL(&lista) == SUCCESS)
-		printf("    OK: Lista destroida com SUCCESSo.\n");
-	else 
-	    printf("    FAIL: Falha na destruição da lista.\n");
-	   
+    /* cria a lista de ints */
+    if (cDDLL(&lista, sizeof(int)) != SUCCESS) {
+        fprintf(stderr, "FAIL: erro ao criar a lista.\n");
+        free(arg);
+        return 1;
+    } else {
+        printf("OK  : Lista criada com SUCESSO.\n");
+    }
+
+    /* le e insere cada elemento no fim */
+    for (int i = 0; i < rlines; i++) {
+        if (fscanf(stdin, "%d", &arg[i]) != 1) {
+            fprintf(stderr, "FAIL: erro lendo elemento %d.\n", i + 1);
+            dDDLL(&lista);
+            free(arg);
+            return 1;
+        }
+        if (iEnd(lista, &arg[i]) == SUCCESS) {
+            printf("OK  : inserido com SUCESSO (%d).\n", arg[i]);
+        } else {
+            printf("FAIL: falha na insercao (%d).\n", arg[i]);
+        }
+    }
+
+    /* opcional: mostra contagem */
+    printf("INFO: total de elementos = %d\n", countElements(lista));
+
+    /* destroi lista e libera vetor */
+    if (dDDLL(&lista) == SUCCESS) {
+        printf("OK  : Lista destruida com SUCESSO.\n");
+    } else {
+        printf("FAIL: Falha na destruicao da lista.\n");
+    }
+
+    free(arg);
     return 0;
 }
