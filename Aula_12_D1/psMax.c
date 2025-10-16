@@ -68,7 +68,7 @@ int dpsMax(pppsMax ps) {
 }
 
 int getmax1(ppsMax ps, int *arr, int size, int *max1) {
-    (void)ps; // não usado por ora
+    (void)ps; 
     int m1, m2, m3, n1, n2;
     if (scan_top3_bottom2(arr, size, &m1, &m2, &m3, &n1, &n2) != SUCCESS)
         return FAIL;
